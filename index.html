@@ -15,6 +15,8 @@
             font-family: 'Nunito', sans-serif;
             background-color: #000; /* Черный фон */
             color: #fff; /* Белый текст для контраста */
+            overflow: hidden; /* Скрыть выходящие за пределы элементы */
+            position: relative; /* Для позиционирования снежинок */
         }
 
         img {
@@ -24,6 +26,9 @@
             object-fit: cover;
             cursor: pointer;
             margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Тень для фотки */
+            position: relative; /* Для z-index */
+            z-index: 2; /* Фотка выше снежинок */
         }
 
         .text-box {
@@ -32,40 +37,95 @@
             border-radius: 20px; /* Закругленные края */
             text-align: center;
             font-family: 'Nunito', sans-serif;
-            font-weight: 800; /* ExtraBold */
+            font-weight: 400; /* Обычный шрифт */
             color: #fff;
             border: 2px solid #444; /* Темная рамка */
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); /* Тень для текста */
+            position: relative; /* Для z-index */
+            z-index: 2; /* Текст выше снежинок */
+        }
+
+        /* Стили для снежинок */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            width: 8px;
+            height: 8px;
+            background-color: white; /* Белый цвет */
+            border-radius: 50%;
+            filter: blur(1px); /* Размытие для эффекта снега */
+            animation: fall linear infinite;
+            z-index: 1; /* Снежинки за фоткой и текстом */
+        }
+
+        /* Анимация падения снежинок */
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
         }
     </style>
 </head>
 <body>
-    <img src="https://avatars.mds.yandex.net/i?id=be8a164c65eb5cf6f6a46d9e96f51b448e72ca6b-11917684-images-thumbs&n=13" alt="Фото" onclick="playSound()">
+    <img id="photo" src="https://avatars.mds.yandex.net/i?id=be8a164c65eb5cf6f6a46d9e96f51b448e72ca6b-11917684-images-thumbs&n=13" alt="Фото" onclick="playSound()">
 
     <div class="text-box">
         <a href="https://t.me/soundtagtutorial1" style="color: inherit; text-decoration: none;">https://t.me/soundtagtutorial1</a>
     </div>
 
     <!-- Аудио элемент -->
-    <audio id="sound" src="sound.mp3"></audio>
+    <audio id="sound"></audio>
 
     <script>
         const audio = document.getElementById('sound');
+        const photo = document.getElementById('photo');
+
+        // Массив с названиями звуков
+        const sounds = ['sound.mp3', '2.mp3', '3.mp3', '4.mp3'];
+
+        // Функция для выбора случайного звука
+        function getRandomSound() {
+            const randomIndex = Math.floor(Math.random() * sounds.length); // Случайный индекс
+            return sounds[randomIndex]; // Возвращаем случайный звук
+        }
 
         // Функция для воспроизведения звука
         function playSound() {
             if (audio.paused) { // Если звук не воспроизводится
+                const randomSound = getRandomSound(); // Выбираем случайный звук
+                audio.src = randomSound; // Устанавливаем источник звука
                 audio.play(); // Начать воспроизведение
-            } else {
-                audio.currentTime = 0; // Перемотать в начало
-                audio.play(); // Начать воспроизведение заново
+                photo.style.pointerEvents = 'none'; // Отключить клики на фотку
             }
         }
 
-        // Повтор звука один раз после завершения
+        // Включить клики на фотку после завершения звука
         audio.addEventListener('ended', () => {
-            audio.currentTime = 0; // Перемотать в начало
-            audio.play(); // Начать воспроизведение заново
+            photo.style.pointerEvents = 'auto'; // Включить клики на фотку
         });
+
+        // Функция для создания снежинок
+        function createSnowflakes() {
+            const snowflakesContainer = document.createElement('div');
+            snowflakesContainer.classList.add('snowflakes');
+
+            for (let i = 0; i < 50; i++) { // Количество снежинок
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.style.left = `${Math.random() * 100}vw`; // Случайная позиция по горизонтали
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`; // Случайная скорость падения
+                snowflake.style.opacity = Math.random(); // Случайная прозрачность
+                snowflakesContainer.appendChild(snowflake);
+            }
+
+            document.body.appendChild(snowflakesContainer);
+        }
+
+        // Создаем снежинки при загрузке страницы
+        createSnowflakes();
     </script>
 </body>
 </html>
