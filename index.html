@@ -67,6 +67,18 @@
                 transform: translateY(100vh);
             }
         }
+
+        /* Стили для надписи в правом нижнем углу */
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #444; /* Темно-серый цвет */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Тень */
+            z-index: 3; /* Надпись выше всего */
+        }
     </style>
 </head>
 <body>
@@ -78,6 +90,9 @@
 
     <!-- Аудио элемент -->
     <audio id="sound"></audio>
+
+    <!-- Надпись в правом нижнем углу -->
+    <div class="footer">Powered by kqqwxx</div>
 
     <script>
         const audio = document.getElementById('sound');
@@ -92,12 +107,17 @@
             return sounds[randomIndex]; // Возвращаем случайный звук
         }
 
-        // Функция для воспроизведения звука
+        // Функция для воспроизведения случайного звука
+        function playRandomSound() {
+            const randomSound = getRandomSound(); // Выбираем случайный звук
+            audio.src = randomSound; // Устанавливаем источник звука
+            audio.play(); // Начать воспроизведение
+        }
+
+        // Функция для воспроизведения звука при клике
         function playSound() {
             if (audio.paused) { // Если звук не воспроизводится
-                const randomSound = getRandomSound(); // Выбираем случайный звук
-                audio.src = randomSound; // Устанавливаем источник звука
-                audio.play(); // Начать воспроизведение
+                playRandomSound(); // Воспроизводим случайный звук
                 photo.style.pointerEvents = 'none'; // Отключить клики на фотку
             }
         }
@@ -105,6 +125,7 @@
         // Включить клики на фотку после завершения звука
         audio.addEventListener('ended', () => {
             photo.style.pointerEvents = 'auto'; // Включить клики на фотку
+            playRandomSound(); // Воспроизвести новый случайный звук
         });
 
         // Функция для создания снежинок
