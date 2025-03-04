@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundTag</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: #000; /* Черный фон */
+            color: #fff; /* Белый текст для контраста */
+        }
+
+        img {
+            border-radius: 50%; /* Закругленные края фото */
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .text-box {
+            background-color: #333; /* Серый фон */
+            padding: 15px 30px;
+            border-radius: 20px; /* Закругленные края */
+            text-align: center;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800; /* ExtraBold */
+            color: #fff;
+            border: 2px solid #444; /* Темная рамка */
+        }
+    </style>
+</head>
+<body>
+    <img src="https://avatars.mds.yandex.net/i?id=be8a164c65eb5cf6f6a46d9e96f51b448e72ca6b-11917684-images-thumbs&n=13" alt="Фото" onclick="playSound()">
+
+    <div class="text-box">
+        <a href="https://t.me/soundtagtutorial1" style="color: inherit; text-decoration: none;">https://t.me/soundtagtutorial1</a>
+    </div>
+
+    <!-- Аудио элемент -->
+    <audio id="sound" src="sound.mp3"></audio>
+
+    <script>
+        const audio = document.getElementById('sound');
+
+        // Функция для воспроизведения звука
+        function playSound() {
+            if (audio.paused) { // Если звук не воспроизводится
+                audio.play(); // Начать воспроизведение
+            } else {
+                audio.currentTime = 0; // Перемотать в начало
+                audio.play(); // Начать воспроизведение заново
+            }
+        }
+
+        // Повтор звука один раз после завершения
+        audio.addEventListener('ended', () => {
+            audio.currentTime = 0; // Перемотать в начало
+            audio.play(); // Начать воспроизведение заново
+        });
+    </script>
+</body>
+</html>
